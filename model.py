@@ -1,26 +1,5 @@
 # -*- coding: utf-8 -*-
 
-""" Deeplabv3+ model for Keras.
-This model is based on TF repo:
-https://github.com/tensorflow/models/tree/master/research/deeplab
-On Pascal VOC, original model gets to 84.56% mIOU
-
-Now this model is only available for the TensorFlow backend,
-due to its reliance on `SeparableConvolution` layers, but Theano will add
-this layer soon.
-
-MobileNetv2 backbone is based on this repo:
-https://github.com/JonathanCMitchell/mobilenet_v2_keras
-
-# Reference
-- [Encoder-Decoder with Atrous Separable Convolution
-    for Semantic Image Segmentation](https://arxiv.org/pdf/1802.02611.pdf)
-- [Xception: Deep Learning with Depthwise Separable Convolutions]
-    (https://arxiv.org/abs/1610.02357)
-- [Inverted Residuals and Linear Bottlenecks: Mobile Networks for
-    Classification, Detection and Segmentation](https://arxiv.org/abs/1801.04381)
-"""
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -106,18 +85,6 @@ class BilinearUpsampling(Layer):
 
 
 def SepConv_BN(x, filters, prefix, stride=1, kernel_size=3, rate=1, depth_activation=False, epsilon=1e-3):
-    """ SepConv with BN between depthwise & pointwise. Optionally add activation after BN
-        Implements right "same" padding for even kernel sizes
-        Args:
-            x: input tensor
-            filters: num of filters in pointwise convolution
-            prefix: prefix before name
-            stride: stride at depthwise conv
-            kernel_size: kernel size for depthwise convolution
-            rate: atrous rate for depthwise convolution
-            depth_activation: flag to use activation between depthwise & poinwise convs
-            epsilon: epsilon to use in BN layer
-    """
 
     if stride == 1:
         depth_padding = 'same'
@@ -146,16 +113,7 @@ def SepConv_BN(x, filters, prefix, stride=1, kernel_size=3, rate=1, depth_activa
 
 
 def _conv2d_same(x, filters, prefix, stride=1, kernel_size=3, rate=1):
-    """Implements right 'same' padding for even kernel sizes
-        Without this there is a 1 pixel drift when stride = 2
-        Args:
-            x: input tensor
-            filters: num of filters in pointwise convolution
-            prefix: prefix before name
-            stride: stride at depthwise conv
-            kernel_size: kernel size for depthwise convolution
-            rate: atrous rate for depthwise convolution
-    """
+
     if stride == 1:
         return Conv2D(filters,
                       (kernel_size, kernel_size),

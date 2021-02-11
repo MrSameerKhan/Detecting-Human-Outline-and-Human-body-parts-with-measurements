@@ -23,11 +23,7 @@ height = 5.10
 dpi =96
 
 frame1 = cv2.imread("imgs/single1.jpg")
-#cv2.imshow("orignal",frame1)
 frame=cv2.resize(frame1, (640, 960)) 
-#cv2.imshow("resized",frame2)
-#cv2.waitKey(0)
-#frame=cv2.imread(frame2)
 
 frameCopy = np.copy(frame)
 frameWidth = frame.shape[1]
@@ -51,7 +47,6 @@ print("time taken by network : {:.3f}".format(time.time() - t))
 H = output.shape[2]
 W = output.shape[3]
 
-
 def midpoint(ptA, ptB):
     return ((ptA[0] + ptB[0]) * 0.5, (ptA[1] + ptB[1]) * 0.5)
 
@@ -61,13 +56,6 @@ x2=1
 x1=1
 y2=1
 y1 = 1280
-
-
-
-#dist = sqrt( (x2 - x1)**2 + (y2 - y1)**2 )
-
-print("distance of ", dist)
-
 
 # Empty list to store the detected keypoints
 points = []
@@ -92,8 +80,6 @@ for i in range(nPoints):
     else :
         points.append(None)
 
-
-
 # Draw Skeleton
 for pair in POSE_PAIRS:
     partA = pair[0]
@@ -108,13 +94,10 @@ for pair in POSE_PAIRS:
 
         print('point 2', points[2])
 
-        
         cv2.line(frame, points[2], points[4], (255,0, 0), 2)
         cv2.circle(frame, points[2], 8, (0, 0, 0), thickness=-1, lineType=cv2.FILLED)
         cv2.circle(frame, points[4], 8, (0, 0, 0), thickness=-1, lineType=cv2.FILLED)
-        
-       
-       
+
         D = (dist.euclidean(points[2], points[4])/dpi)/centi
         (mX, mY) = midpoint(points[2], points[4])
         cv2.putText(frame, "{:.1f} cm".format(D), (int(mX), int(mY - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0,0, 255), 2)

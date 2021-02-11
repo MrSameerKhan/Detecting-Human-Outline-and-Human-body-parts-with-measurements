@@ -19,12 +19,8 @@ elif MODE is "MPI" :
 
 height = 5.10
 
-frame1 = cv2.imread("imgs/single6.jpg")
-#cv2.imshow("orignal",frame1)
+frame1 = cv2.imread("predict/single6.jpg")
 frame=cv2.resize(frame1, (640, 960)) 
-#cv2.imshow("resized",frame2)
-#cv2.waitKey(0)
-#frame=cv2.imread(frame2)
 
 frameCopy = np.copy(frame)
 frameWidth = frame.shape[1]
@@ -34,7 +30,6 @@ threshold = 0.1
 net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 
 t = time.time()
-# input image dimensions for the network
 inWidth = 368
 inHeight = 368
 inpBlob = cv2.dnn.blobFromImage(frame, 1.0 / 255, (inWidth, inHeight),
@@ -76,8 +71,6 @@ for i in range(nPoints):
         points.append((int(x), int(y)))
     else :
         points.append(None)
-
-
 
 # Draw Skeleton
 for pair in POSE_PAIRS:

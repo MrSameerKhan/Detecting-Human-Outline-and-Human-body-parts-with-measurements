@@ -16,15 +16,8 @@ elif MODE is "MPI" :
     nPoints = 15
     POSE_PAIRS = [[0,1], [1,2], [2,3], [3,4], [1,5], [5,6], [6,7], [1,14], [14,8], [8,9], [9,10], [14,11], [11,12], [12,13] ]
 
-
-
-
-frame1 = cv2.imread("imgs/single1.jpg")
-#cv2.imshow("orignal",frame1)
+frame1 = cv2.imread("predict/single1.jpg")
 frame=cv2.resize(frame1, (640, 960)) 
-#cv2.imshow("resized",frame2)
-#cv2.waitKey(0)
-#frame=cv2.imread(frame2)
 
 frameCopy = np.copy(frame)
 frameWidth = frame.shape[1]
@@ -34,7 +27,6 @@ threshold = 0.1
 net = cv2.dnn.readNetFromCaffe(protoFile, weightsFile)
 
 t = time.time()
-# input image dimensions for the network
 inWidth = 368
 inHeight = 368
 inpBlob = cv2.dnn.blobFromImage(frame, 1.0 / 255, (inWidth, inHeight),
@@ -83,9 +75,7 @@ for pair in POSE_PAIRS:
     
     font = cv2.FONT_HERSHEY_SIMPLEX
     
-    
     #Right Hand
-    
     if points[2] and points[3]:
         half=points[2]
         half1=points[3]
@@ -95,20 +85,16 @@ for pair in POSE_PAIRS:
         y2=half1[1]
         mid1x=int((x1+x2)/2)
         mid1y=int((y1+y2)/2)
-        #print("----------midx------------")
-        #print(int(mid1x))
-        #print("----------------midy------------")
-        #print(int(mid1y))
-       
-        #cv2.line(frame, points[2], points[3], (255,0, 0), 2)
+
         cv2.circle(frame, points[2], 8, (0, 0, 0), thickness=-3, lineType=cv2.FILLED)
         cv2.circle(frame, points[3], 8, (0, 0, 0), thickness=-1, lineType=cv2.FILLED)
         cv2.circle(frame, half, 8, (0, 0, 0), thickness=-1, lineType=cv2.FILLED)
-        #cv2.ellipse(frame,(mid1x,mid1y),(100,50),0,0,360,255,3)80,50
         cv2.ellipse(frame,(mid1x,mid1y),(30,50),30,0.0,360.0,(255,0,0),4)
+        
     if points[2] and points[5]:
         (mX, mY) = midpoint(points[2], points[4])
         cv2.putText(frame, "Right Hand", (int(mX), int(mY - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0,0,0), 2)
+        
     if points[3] and points[4]:
         right1=points[3]
         right2=points[4]
@@ -118,13 +104,9 @@ for pair in POSE_PAIRS:
         right_y1=right2[1]
         mid_x=int((right_x+right_x1)/2)
         mid_y=int((right_y+right_y1)/2)
-        #print("hahahahhahahahhahahahahahhahahahahah")
-        #print(mid_x,mid_y)
-        #cv2.line(frame, points[3], points[4], (255,0, 0), 2)
         cv2.circle(frame, points[3], 8, (0, 0, 0), thickness=-3, lineType=cv2.FILLED)
         cv2.circle(frame, points[4], 8, (0, 0, 0), thickness=-1, lineType=cv2.FILLED)
         cv2.ellipse(frame,(mid_x,mid_y),(30,50),30,0.0,360.0,(255,0,0),4)
-    #cv2.putText(frame,'right side ',(), font, 4,(0,255,0),2,cv2.LINE_AA)
     
     #Left Hand
     if points[5] and points[6]:
@@ -136,7 +118,6 @@ for pair in POSE_PAIRS:
         left_y2=left1[1]
         mid_xx=int((left_x1+left_x2)/2)
         mid_yy=int((left_y1+left_y2)/2)
-        #cv2.line(frame, points[5], points[6], (255,0, 0), 2)
         cv2.circle(frame, points[5], 8, (0, 0, 0), thickness=-3, lineType=cv2.FILLED)
         cv2.circle(frame, points[6], 8, (0, 0, 0), thickness=-1, lineType=cv2.FILLED)
         cv2.ellipse(frame,(mid_xx,mid_yy),(30,50),-30,0.0,360.0,(255,0,0),4)
@@ -144,6 +125,7 @@ for pair in POSE_PAIRS:
     if points[5] and points[7]:
         (mX, mY) = midpoint(points[5], points[7])
         cv2.putText(frame, "Left Hand", (int(mX), int(mY - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0,0,0), 2)
+        
     if points[6] and points[7]:
         leftt=points[6]
         left1t=points[7]
@@ -153,10 +135,11 @@ for pair in POSE_PAIRS:
         left_y2t=left1t[1]
         mid_xxt=int((left_x1t+left_x2t)/2)
         mid_yyt=int((left_y1t+left_y2t)/2)
-        #cv2.line(frame, points[6], points[7], (255,0, 0), 2)
+        
         cv2.circle(frame, points[6], 8, (0, 0,0), thickness=-3, lineType=cv2.FILLED)
         cv2.circle(frame, points[7], 8, (0, 0,0), thickness=-1, lineType=cv2.FILLED)
         cv2.ellipse(frame,(mid_xxt,mid_yyt),(30,50),-30,0.0,360.0,(255,0,0),4)
+        
     #Right Leg
     if points[8] and points[9]:
         lefttf=points[8]
@@ -167,7 +150,6 @@ for pair in POSE_PAIRS:
         left_y2tf=left1tf[1]
         mid_xxtf=int((left_x1tf+left_x2tf)/2)
         mid_yytf=int((left_y1tf+left_y2tf)/2)
-       # cv2.line(frame, points[8], points[9], (0,255, 0), 2)
         cv2.circle(frame, points[8], 8, (0, 0,0), thickness=-3, lineType=cv2.FILLED)
         cv2.circle(frame, points[9], 8, (0, 0,0), thickness=-1, lineType=cv2.FILLED)
         cv2.ellipse(frame,(mid_xxtf,mid_yytf),(30,50),0.0,0.0,360.0,(0,255,0),4)
@@ -175,6 +157,7 @@ for pair in POSE_PAIRS:
     if points[8] and points[10]:
         (mX, mY) = midpoint(points[8], points[10])
         cv2.putText(frame, "Right Leg", (int(mX), int(mY - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0,0,0), 2)
+        
     if points[9] and points[10]:
         lefttm=points[9]
         left1tm=points[10]
@@ -184,7 +167,6 @@ for pair in POSE_PAIRS:
         left_y2tm=left1tm[1]
         mid_xxtm=int((left_x1tm+left_x2tm)/2)
         mid_yytm=int((left_y1tm+left_y2tm)/2)
-       # cv2.line(frame, points[9], points[10], (0,255, 0), 2)
         cv2.circle(frame, points[9], 8, (0, 0,0), thickness=-3, lineType=cv2.FILLED)
         cv2.circle(frame, points[10], 8, (0, 0,0), thickness=-1, lineType=cv2.FILLED)
         cv2.ellipse(frame,(mid_xxtm,mid_yytm),(30,50),0.0,0.0,360.0,(0,255,0),4)
@@ -200,7 +182,6 @@ for pair in POSE_PAIRS:
         mid_xxts=int((left_x1ts+left_x2ts)/2)
         mid_yyts=int((left_y1ts+left_y2ts)/2)
 
-        #cv2.line(frame, points[11], points[12], (0,255, 0), 2)
         cv2.circle(frame, points[11], 8, (0, 0,0), thickness=-3, lineType=cv2.FILLED)
         cv2.circle(frame, points[12], 8, (0, 0,0), thickness=-1, lineType=cv2.FILLED)
         cv2.ellipse(frame,(mid_xxts,mid_yyts),(30,50),0.0,0.0,360.0,(0,255,0),4)
@@ -217,7 +198,6 @@ for pair in POSE_PAIRS:
         mid_xxtz=int((left_x1tz+left_x2tz)/2)
         mid_yytz=int((left_y1tz+left_y2tz)/2)
         
-        #cv2.line(frame, points[12], points[13], (0,255, 0), 2)
         cv2.circle(frame, points[12], 8, (0, 0,0), thickness=-3, lineType=cv2.FILLED)
         cv2.circle(frame, points[13], 8, (0, 0,0), thickness=-1, lineType=cv2.FILLED)
         cv2.ellipse(frame,(mid_xxtz,mid_yytz),(30,50),0.0,0.0,360.0,(0,255,0),4)
@@ -244,17 +224,6 @@ for pair in POSE_PAIRS:
         cv2.putText(frame, "Torso", (int(mX), int(mY - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0,0,0), 2)
 
 
-        
-           
-        
-          
-
-#    if points[partA] and points[partB]:
-#       cv2.line(frame, points[partA], points[partB], (0, 255, 255), 2)
-#       cv2.circle(frame, points[partA], 8, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
-
-#cv2.boxPoints()
-#v2.imshow('Output-Keypoints', frameCopy)
 cv2.imshow('Body_Segmentation', frame)
 
 
